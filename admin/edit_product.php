@@ -1,4 +1,4 @@
-<?php
+<?php include("admin_header.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -330,3 +330,4 @@ if (isset($_POST['update_product'])) {
 </div>
 </body>
 </html>
+<?php include("admin_footer.php"); ?>

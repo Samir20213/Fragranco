@@ -325,38 +325,33 @@
         <p class="section-subtitle text-center">Discover our carefully selected premium perfumes made to leave a lasting impression.</p>
 
         <div class="row g-4">
+            <?php
+            include("config/db.php");
+            $featured_query = mysqli_query($conn, "SELECT * FROM products WHERE is_featured=1 AND status='active' ORDER BY id DESC LIMIT 3");
+            while($row = mysqli_fetch_assoc($featured_query)) {
+                $image_path = $row['main_image'];
+                if (!filter_var($image_path, FILTER_VALIDATE_URL)) {
+                    $image_path = "assets/uploads/" . $image_path;
+                }
+            ?>
             <div class="col-md-4">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=80" alt="Featured 1">
+                    <img src="<?php echo $image_path; ?>" alt="">
                     <div class="product-body text-center">
-                        <h3 class="product-title">Royal Oud</h3>
-                        <p class="product-price">৳ 799</p>
-                        <a href="shop.php" class="product-btn">View Product</a>
+                        <h3 class="product-title"><?php echo $row['name']; ?></h3>
+                        <p class="product-price">
+                            <?php if (!empty($row['discount_price']) && $row['discount_price'] > 0) { ?>
+                                <span class="old-price">৳<?php echo $row['price']; ?></span>
+                                ৳<?php echo $row['discount_price']; ?>
+                            <?php } else { ?>
+                                ৳<?php echo $row['price']; ?>
+                            <?php } ?>
+                        </p>
+                        <a href="product-details.php?id=<?php echo $row['id']; ?>" class="product-btn">View Product</a>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" alt="Featured 2">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Golden Mist</h3>
-                        <p class="product-price">৳ 999</p>
-                        <a href="shop.php" class="product-btn">View Product</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=800&q=80" alt="Featured 3">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Midnight Bloom</h3>
-                        <p class="product-price">৳ 899</p>
-                        <a href="shop.php" class="product-btn">View Product</a>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 </section>
@@ -368,49 +363,32 @@
         <p class="section-subtitle text-center">Fresh arrivals crafted for modern style, confidence, and all-day charm.</p>
 
         <div class="row g-4">
+            <?php
+            $new_query = mysqli_query($conn, "SELECT * FROM products WHERE is_new_arrival=1 AND status='active' ORDER BY id DESC LIMIT 4");
+            while($row = mysqli_fetch_assoc($new_query)) {
+                $image_path = $row['main_image'];
+                if (!filter_var($image_path, FILTER_VALIDATE_URL)) {
+                    $image_path = "assets/uploads/" . $image_path;
+                }
+            ?>
             <div class="col-md-3">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=80" alt="New 1">
+                    <img src="<?php echo $image_path; ?>" alt="">
                     <div class="product-body text-center">
-                        <h3 class="product-title">Velvet Night</h3>
-                        <p class="product-price">৳ 650</p>
-                        <a href="shop.php" class="product-btn">Shop Now</a>
+                        <h3 class="product-title"><?php echo $row['name']; ?></h3>
+                        <p class="product-price">
+                            <?php if (!empty($row['discount_price']) && $row['discount_price'] > 0) { ?>
+                                <span class="old-price">৳<?php echo $row['price']; ?></span>
+                                ৳<?php echo $row['discount_price']; ?>
+                            <?php } else { ?>
+                                ৳<?php echo $row['price']; ?>
+                            <?php } ?>
+                        </p>
+                        <a href="product-details.php?id=<?php echo $row['id']; ?>" class="product-btn">Shop Now</a>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?auto=format&fit=crop&w=800&q=80" alt="New 2">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Fresh Aura</h3>
-                        <p class="product-price">৳ 720</p>
-                        <a href="shop.php" class="product-btn">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1588405748880-12d1d2a59db9?auto=format&fit=crop&w=800&q=80" alt="New 3">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Ocean Rush</h3>
-                        <p class="product-price">৳ 840</p>
-                        <a href="shop.php" class="product-btn">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1595425964071-6f6d4d4b42d9?auto=format&fit=crop&w=800&q=80" alt="New 4">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Soft Desire</h3>
-                        <p class="product-price">৳ 780</p>
-                        <a href="shop.php" class="product-btn">Shop Now</a>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 </section>
@@ -422,38 +400,32 @@
         <p class="section-subtitle text-center">Loved by customers for their unique blend, premium feel, and long-lasting fragrance.</p>
 
         <div class="row g-4">
+            <?php
+            $best_query = mysqli_query($conn, "SELECT * FROM products WHERE is_best_seller=1 AND status='active' ORDER BY id DESC LIMIT 3");
+            while($row = mysqli_fetch_assoc($best_query)) {
+                $image_path = $row['main_image'];
+                if (!filter_var($image_path, FILTER_VALIDATE_URL)) {
+                    $image_path = "assets/uploads/" . $image_path;
+                }
+            ?>
             <div class="col-md-4">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=800&q=80" alt="Best 1">
+                    <img src="<?php echo $image_path; ?>" alt="">
                     <div class="product-body text-center">
-                        <h3 class="product-title">Black Essence</h3>
-                        <p class="product-price">৳ 1099</p>
-                        <a href="shop.php" class="product-btn">Buy Now</a>
+                        <h3 class="product-title"><?php echo $row['name']; ?></h3>
+                        <p class="product-price">
+                            <?php if (!empty($row['discount_price']) && $row['discount_price'] > 0) { ?>
+                                <span class="old-price">৳<?php echo $row['price']; ?></span>
+                                ৳<?php echo $row['discount_price']; ?>
+                            <?php } else { ?>
+                                ৳<?php echo $row['price']; ?>
+                            <?php } ?>
+                        </p>
+                        <a href="product-details.php?id=<?php echo $row['id']; ?>" class="product-btn">Buy Now</a>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba4?auto=format&fit=crop&w=800&q=80" alt="Best 2">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Amber Gold</h3>
-                        <p class="product-price">৳ 1199</p>
-                        <a href="shop.php" class="product-btn">Buy Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1615634262417-8d9ed8f94973?auto=format&fit=crop&w=800&q=80" alt="Best 3">
-                    <div class="product-body text-center">
-                        <h3 class="product-title">Classic Noir</h3>
-                        <p class="product-price">৳ 950</p>
-                        <a href="shop.php" class="product-btn">Buy Now</a>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 </section>

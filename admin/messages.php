@@ -1,14 +1,10 @@
 <?php
+include("auth.php");
+include("admin_header.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-session_start();
 include("../config/db.php");
-
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
-    exit();
-}
 
 $query = mysqli_query($conn, "SELECT * FROM contact_messages ORDER BY id DESC");
 ?>
@@ -79,3 +75,4 @@ $query = mysqli_query($conn, "SELECT * FROM contact_messages ORDER BY id DESC");
 
 </body>
 </html>
+<?php include("admin_footer.php"); ?>

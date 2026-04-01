@@ -1,14 +1,10 @@
 <?php
+include("auth.php");
+include("admin_header.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-session_start();
 include("../config/db.php");
-
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
-    exit();
-}
 
 // total orders
 $total_orders_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM orders");
@@ -97,24 +93,6 @@ $low_stock = mysqli_fetch_assoc($low_stock_query)['total'];
 </head>
 <body>
 
-<div class="top-bar">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div>
-            <h3 class="mb-0">FRAGRANCO Admin Panel</h3>
-        </div>
-        <div>
-            Welcome, <?php echo $_SESSION['admin_username']; ?>
-
-            <a href="dashboard.php">Dashboard</a>
-            <a href="products.php">Products</a>
-            <a href="add_product.php" style="color:skyblue;">Add Product</a>
-            <a href="orders.php" style="color:lightgreen;">Orders</a>
-            <a href="messages.php">Messages</a>
-            <a href="logout.php" style="color:red;">Logout</a>
-        </div>
-    </div>
-</div>
-
 <div class="container pb-5">
     <h1 class="dashboard-title text-center">Admin Dashboard</h1>
 
@@ -165,3 +143,4 @@ $low_stock = mysqli_fetch_assoc($low_stock_query)['total'];
 
 </body>
 </html>
+<?php include("admin_footer.php"); ?>

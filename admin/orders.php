@@ -1,8 +1,9 @@
 <?php
+include("auth.php");
+include("admin_header.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include("auth.php");
 include("../config/db.php");
 include("../mail/mailer.php");
 
@@ -154,3 +155,4 @@ $order_query = mysqli_query($conn, "SELECT * FROM orders ORDER BY id DESC");
 </div>
 </body>
 </html>
+<?php include("admin_footer.php"); ?>

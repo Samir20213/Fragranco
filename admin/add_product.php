@@ -1,8 +1,9 @@
 <?php
+include("auth.php");
+include("admin_header.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include("auth.php");
 include("../config/db.php");
 
 $message = "";
@@ -294,3 +295,4 @@ if (isset($_POST['add_product'])) {
 </div>
 </body>
 </html>
+<?php include("admin_footer.php"); ?>

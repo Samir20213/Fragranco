@@ -11,21 +11,55 @@ if (!isset($_SESSION['cart'])) {
 // add to cart logic
 if (isset($_POST['add_to_cart']) || isset($_POST['buy_now'])) {
     $product_id = (int) $_POST['product_id'];
-    $size = $_POST['size'];
+    $size = trim($_POST['size']);
     $qty = (int) $_POST['qty'];
+
+    if ($qty <= 0) {
+        $qty = 1;
+    }
+
+    // selected size এর stock check
+    $stock_stmt = mysqli_prepare($conn, "SELECT stock FROM product_sizes_stock WHERE product_id=? AND size=? LIMIT 1");
+    mysqli_stmt_bind_param($stock_stmt, "is", $product_id, $size);
+    mysqli_stmt_execute($stock_stmt);
+    $stock_result = mysqli_stmt_get_result($stock_stmt);
+    $stock_row = mysqli_fetch_assoc($stock_result);
+    mysqli_stmt_close($stock_stmt);
+
+    if (!$stock_row) {
+        echo "<script>alert('Selected size not found.'); window.location.href='cart.php';</script>";
+        exit();
+    }
+
+    $available_stock = (int)$stock_row['stock'];
+
+    if ($available_stock <= 0) {
+        echo "<script>alert('This size is out of stock.'); window.history.back();</script>";
+        exit();
+    }
+
+    if ($qty > $available_stock) {
+        echo "<script>alert('Requested quantity is more than available stock.'); window.history.back();</script>";
+        exit();
+    }
 
     $found = false;
 
-    // same product + same size already in cart?
     foreach ($_SESSION['cart'] as $key => $item) {
         if ($item['product_id'] == $product_id && $item['size'] == $size) {
-            $_SESSION['cart'][$key]['qty'] += $qty;
+            $new_qty = $_SESSION['cart'][$key]['qty'] + $qty;
+
+            if ($new_qty > $available_stock) {
+                echo "<script>alert('Total quantity exceeds available stock.'); window.history.back();</script>";
+                exit();
+            }
+
+            $_SESSION['cart'][$key]['qty'] = $new_qty;
             $found = true;
             break;
         }
     }
 
-    // if not found, add new item
     if (!$found) {
         $_SESSION['cart'][] = [
             'product_id' => $product_id,

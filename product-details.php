@@ -238,15 +238,25 @@ while ($size_row = mysqli_fetch_assoc($size_query)) {
                         <div class="size-box">
                             <label for="size">Select Size</label>
                             <select name="size" id="size" class="size-select" required>
-                                <?php if (!empty($sizes)) { ?>
-                                    <?php foreach ($sizes as $size) { ?>
-                                        <option value="<?php echo $size['size']; ?>">
-                                            <?php echo $size['size']; ?>
-                                        </option>
-                                    <?php } ?>
-                                <?php } else { ?>
-                                    <option value="">No size available</option>
-                                <?php } ?>
+                                <?php
+                                $available_found = false;
+                                if (!empty($sizes)) {
+                                    foreach ($sizes as $size) {
+                                        if ((int)$size['stock'] > 0) {
+                                            $available_found = true;
+                        ?>
+                                            <option value="<?php echo $size['size']; ?>">
+                                                <?php echo $size['size']; ?> (Available)
+                                            </option>
+                        <?php
+                                        }
+                                    }
+                                }
+
+                                if (!$available_found) {
+                                    echo '<option value="">Out of Stock</option>';
+                                }
+                                ?>
                             </select>
 
                             <label for="quantity">Quantity</label>
@@ -265,8 +275,12 @@ while ($size_row = mysqli_fetch_assoc($size_query)) {
                         </div>
 
                         <div>
-                            <button type="submit" name="add_to_cart" class="action-btn cart-btn">Add to Cart</button>
-                            <button type="submit" name="buy_now" class="action-btn buy-btn">Buy Now</button>
+                            <?php if ($available_found) { ?>
+                                <button type="submit" name="add_to_cart" class="action-btn cart-btn">Add to Cart</button>
+                                <button type="submit" name="buy_now" class="action-btn buy-btn">Buy Now</button>
+                            <?php } else { ?>
+                                <button type="button" class="action-btn cart-btn" disabled style="opacity:0.6; cursor:not-allowed;">Out of Stock</button>
+                            <?php } ?>
                         </div>
                     </form>
                     </div>
